@@ -27,22 +27,24 @@ import {
   ExtraText,
   TextLink,
   TextLinkContent,
-} from './../components/styles';
-import { View, ActivityIndicator } from 'react-native';
+} from '../TSScreens/Styles';
+import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
 
 import axios from 'axios';
 
 //Color
 const { brand, darkLight, primary } = Colors;
 
-const Login = ({ navigation }) => {
+const Signup = ({ navigation }) => {
   const [hidePassword, setHidePassword] = useState(true);
+  const [show, setShow] = useState(false);
   const [message, setMessage] = useState();
   const [messageType, setMessageType] = useState();
-  const handleLogin = (credentials, setSubmitting) => {
-    handleMessage(null);
-    const url = 'https://whispering-headland-00232.herokuapp.com/user/signin';
+  //form handing
 
+  const handleSignup = (credentials, setSubmitting) => {
+    handleMessage(null);
+    const url = 'https://whispering-headland-00232.herokuapp.com/user/signup';
     axios
       .post(url, credentials)
       .then((response) => {
@@ -52,7 +54,7 @@ const Login = ({ navigation }) => {
         if (status !== 'SUCCESS') {
           handleMessage(message, status);
         } else {
-          navigation.navigate('Welcome', { ...data[0] });
+          navigation.navigate('Welcome', { ...data });
         }
         setSubmitting(false);
       })
@@ -67,26 +69,41 @@ const Login = ({ navigation }) => {
     setMessage(message);
     setMessageType(type);
   };
-
   return (
     <StyledContainer>
       <StatusBar style="dark" />
       <InnerContainer>
-        <PageLogo resizeMode="cover" source={require('./../assets/Tonly_logo.png')} />
-        <PageTitle>TRANS CURRENCY</PageTitle>
-        <SubTitle>Account Login</SubTitle>
+        <PageTitle>Project 305</PageTitle>
+        <SubTitle>Account Signup</SubTitle>
 
         <Formik
-          initialValues={{ email: '', password: '' }}
-          onSubmit={(values) => {
-            console.log(values);
-            navigation.navigate('Welcome')
+          initialValues={{ name: '', email: '', password: '', confirmPassword: '' }}
+          onSubmit={(values, { setSubmitting }) => {
+            // values = { ...values };
+            if (values.email == '' || values.password == '' || values.name == '' || values.confirmPassword == '') {
+              handleMessage('Please fill all the fields');
+              setSubmitting(false);
+            } else if (values.password !== values.confirmPassword) {
+              handleMessage('Password do not match');
+              setSubmitting(false);
+            } else {
+              handleSignup(values.setSubmitting);
+            }
           }}
         >
-          {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
+          {({ handleChange, handleBlur, handleSubmit, values, isSubmitting ,  navigation }) => (
             <StyledFormArea>
               <MyTextInput
-                label="Username"
+                label="Full Name"
+                icon="person"
+                placeholder="Full Name"
+                placeholderTextColor={darkLight}
+                onChangeText={handleChange('name')}
+                onBlur={handleBlur('name')}
+                value={values.name}
+              />
+              <MyTextInput
+                label="Email Address"
                 icon="mail"
                 placeholder="111@gmail.com"
                 placeholderTextColor={darkLight}
@@ -108,17 +125,30 @@ const Login = ({ navigation }) => {
                 hidePassword={hidePassword}
                 setHidePassword={setHidePassword}
               />
+              <MyTextInput
+                label="Confirm Password"
+                icon="lock"
+                placeholder="*********"
+                placeholderTextColor={darkLight}
+                onChangeText={handleChange('confirmPassword')}
+                onBlur={handleBlur('confirmPassword')}
+                value={values.confirmPassword}
+                secureTextEntry={hidePassword}
+                isPassword={true}
+                hidePassword={hidePassword}
+                setHidePassword={setHidePassword}
+              />
               <MsgBox type={messageType}>{message}</MsgBox>
               {!isSubmitting && (
-                <StyledButton onPress = {() => navigation.navigate('Welcome')}>
-                  <ButtonText>Login</ButtonText>
+                <StyledButton onPress={handleSubmit}>
+                  <ButtonText>Signup</ButtonText>
                 </StyledButton>
               )}
               <Line />
               <ExtraView>
-                <ExtraText>Don't have an account already? </ExtraText>
-                <TextLink onPress={() => navigation.navigate('Signup')}>
-                  <TextLinkContent>Signup</TextLinkContent>
+                <ExtraText>Already have an account? </ExtraText>
+                <TextLink onPress={() => navigation.navigate('Login')}>
+                  <TextLinkContent>Login</TextLinkContent>
                 </TextLink>
               </ExtraView>
             </StyledFormArea>
@@ -146,4 +176,4 @@ const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, .
   );
 };
 
-export default Login;
+export default Signup;

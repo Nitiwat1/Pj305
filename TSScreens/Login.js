@@ -27,7 +27,7 @@ import {
   ExtraText,
   TextLink,
   TextLinkContent,
-} from './../components/styles';
+} from '../TSScreens/Styles';
 import { View, ActivityIndicator } from 'react-native';
 
 import axios from 'axios';
@@ -73,14 +73,18 @@ const Login = ({ navigation }) => {
       <StatusBar style="dark" />
       <InnerContainer>
         <PageLogo resizeMode="cover" source={require('./../assets/Tonly_logo.png')} />
-        <PageTitle>TRANS CURRENCY</PageTitle>
+        <PageTitle>Project 305</PageTitle>
         <SubTitle>Account Login</SubTitle>
 
         <Formik
           initialValues={{ email: '', password: '' }}
-          onSubmit={(values) => {
-            console.log(values);
-            navigation.navigate('Welcome')
+          onSubmit={(values, { setSubmitting }) => {
+            if (values.email == '' || values.password == '') {
+              handleMessage('Please fill all the fields');
+              setSubmitting(false);
+            } else {
+              handleLogin(values.setSubmitting);
+            }
           }}
         >
           {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
@@ -110,7 +114,7 @@ const Login = ({ navigation }) => {
               />
               <MsgBox type={messageType}>{message}</MsgBox>
               {!isSubmitting && (
-                <StyledButton onPress = {() => navigation.navigate('Welcome')}>
+                <StyledButton onPress={() => navigation.navigate('Welcome')}>
                   <ButtonText>Login</ButtonText>
                 </StyledButton>
               )}

@@ -12,9 +12,9 @@ import {
   WelcomeContainer,
   WelcomeImage,
   Avatar,
-} from './../components/styles';
+} from '../TSScreens/Styles';
 
-const Welcome = ({navigation}) => {
+const Welcome = ({navigation, route}) => {
   // const {name , email} = route.params;
   return (
     <>
@@ -22,15 +22,15 @@ const Welcome = ({navigation}) => {
       <InnerContainer>
         <WelcomeImage resizeMode="cover" source={require('./../assets/Tonly_logo.png')} />
         <WelcomeContainer>
-        <PageTitle >Welcome to </PageTitle>
-          <SubTitle>TRANS CURRENCY App</SubTitle>
-          {/* <SubTitle >{'ABCD@gmail.com'}</SubTitle> */}
+          <PageTitle >Welcome to  </PageTitle>
+          <SubTitle >{'Trans Currency'}</SubTitle>
+          <SubTitle >{'transcurrency@gmail.com'}</SubTitle>
           <StyledFormArea>
             <Avatar resizeMode="cover" source={require('./../assets/Tonly_logo.png')} />
-            <Line />
+            {/* <Line />
             <StyledButton onPress={() => {navigation.navigate('Login')}}>
               <ButtonText>Logout</ButtonText>
-            </StyledButton>
+            </StyledButton> */}
           </StyledFormArea>
         </WelcomeContainer>
       </InnerContainer>

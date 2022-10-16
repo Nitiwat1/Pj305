@@ -6,10 +6,9 @@ import { Formik } from 'formik';
 
 // icons
 import { Octicons, Ionicons } from '@expo/vector-icons';
-
 import {
   StyledContainer,
-  InnerContainer,
+  InnerContainer, 
   PageLogo,
   PageTitle,
   SubTitle,
@@ -42,7 +41,6 @@ const Signup = ({ navigation }) => {
   const [messageType, setMessageType] = useState();
   //form handing
 
-
   const handleSignup = (credentials, setSubmitting) => {
     handleMessage(null);
     const url = 'https://whispering-headland-00232.herokuapp.com/user/signup';
@@ -74,21 +72,25 @@ const Signup = ({ navigation }) => {
     <StyledContainer>
       <StatusBar style="dark" />
       <InnerContainer>
-        <PageTitle>Project 305</PageTitle>
+        <PageTitle>TRANS CURRENCY</PageTitle>
         <SubTitle>Account Signup</SubTitle>
 
         <Formik
           initialValues={{ name: '', email: '', password: '', confirmPassword: '' }}
           onSubmit={(values, { setSubmitting }) => {
-            // values = { ...values };
+            values = { ...values };
             if (values.email == '' || values.password == '' || values.name == '' || values.confirmPassword == '') {
-              handleMessage('Please fill all the fields');
+              alert('ไม่มีช่องไหนถูกใส่อยู่โปรดใส่ให้ครบทุกช่อง');
               setSubmitting(false);
             } else if (values.password !== values.confirmPassword) {
-              handleMessage('Password do not match');
+              alert('รหัสผ่านไม่ตรงกัน');
               setSubmitting(false);
-            } else {
+            } else if (values.email < 8){
+              alert('ชื่อบัญชีต้องมีจำนวนตัวอักษรมากกว่า 8 ตัวอักษร')
+            }
+             else {
               handleSignup(values.setSubmitting);
+              setSubmitting(true);
             }
           }}
         >
@@ -141,7 +143,7 @@ const Signup = ({ navigation }) => {
               />
               <MsgBox type={messageType}>{message}</MsgBox>
               {!isSubmitting && (
-                <StyledButton onPress={handleSubmit}>
+                <StyledButton onPress={() => navigation.navigate('Welcome')}>
                   <ButtonText>Signup</ButtonText>
                 </StyledButton>
               )}
